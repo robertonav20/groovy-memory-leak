@@ -1,6 +1,6 @@
 # Groovy Memory Leak
 
-**VM Options**
+## VM Options
 
 ```
  -Dgroovy.use.classvalue=true 
@@ -15,7 +15,8 @@
  -XX:MaxMetaspaceFreeRatio=100
 ```
 
-Test executed with class GroovyMemoryLeakWithoutClose which execute a dynamic groovy script without nothing safely close operation
+## Unsafe Groovy Script Execution
+**Test executed with class GroovyMemoryLeakWithoutClose which execute a dynamic groovy script without nothing safely close operation**
 ```
     GroovyCodeSource groovyCodeSource = new GroovyCodeSource(script, "SCRIPT", GroovyShell.DEFAULT_CODE_BASE);
     GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
@@ -26,7 +27,15 @@ Test executed with class GroovyMemoryLeakWithoutClose which execute a dynamic gr
 ![Screenshot](withoutclose.png)
 
 
-Test executed with class GroovyMemoryLeakWithClose which execute a dynamic groovy script
+## Safe Groovy Script Execution
+**Test executed with class GroovyMemoryLeakWithClose which execute a dynamic groovy script with some safely close operation**
+
+**Used these methods from GroovySystem at startup**
+```
+    GroovySystem.setKeepJavaMetaClasses(false);
+    GroovySystem.stopThreadedReferenceManager();
+```
+A short description of follow code:
 1. Create a temp file with the script groovy
 2. Create an empty UrlClassLoader
 3. Create a new GroovyClassLoader from UrlClassLoader
